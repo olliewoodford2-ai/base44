@@ -1,0 +1,11 @@
+SubDir libs utils ;
+
+SharedLibrary libyellowdocs-utils.a :
+	src/FileUtils.cpp
+	src/MIMEUtils.cpp
+	src/StringUtils.cpp
+	src/Preferences.cpp
+	src/ClipboardUtils.cpp
+	: be trackersupport
+	: -DYELLOWDOCS_UTILS_LIBRARY
+;

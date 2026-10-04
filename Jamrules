@@ -1,0 +1,32 @@
+# Haiku Build Rules
+# Minimal working Jamrules for Haiku applications
+
+CC ?= gcc ;
+C++ ?= g++ ;
+AR ?= ar ;
+RANLIB ?= ranlib ;
+RESC ?= rc ;
+
+CCFLAGS ?= -O2 ;
+C++FLAGS ?= -O2 ;
+CCFLAGS += -DHAIKU -D_BEOS -D__HAIKU__ ;
+C++FLAGS += -DHAIKU -D_BEOS -D__HAIKU__ ;
+LINKFLAGS ?= ;
+
+SUFOBJ ?= .o ;
+
+rule Application target : sources : libraries : flags {
+	Depends $(target) : $(sources) ;
+	$(C++) -o $(target) $(sources) $(LINKFLAGS) -l$(libraries) $(flags) ;
+}
+
+rule SharedLibrary target : sources : libraries : flags {
+	Depends $(target) : $(sources) ;
+	$(C++) -shared -o $(target) $(sources) $(LINKFLAGS) -l$(libraries) $(flags) ;
+}
+
+rule StaticLibrary target : sources : flags {
+	Depends $(target) : $(sources) ;
+	$(AR) rcs $(target) $(sources) ;
+	$(RANLIB) $(target) ;
+}

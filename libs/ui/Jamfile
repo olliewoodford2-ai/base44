@@ -1,0 +1,14 @@
+SubDir libs ui ;
+
+SharedLibrary libyellowdocs-ui.a :
+	src/Theme.cpp
+	src/Colors.cpp
+	src/Toolbar.cpp
+	src/StatusBar.cpp
+	src/DocumentView.cpp
+	src/RulerView.cpp
+	src/ScrollView.cpp
+	src/SplitView.cpp
+	: be trackersupport libyellowdocs-core.a libyellowdocs-utils.a
+	: -DYELLOWDOCS_UI_LIBRARY
+;

@@ -1,0 +1,20 @@
+SubDir apps writer ;
+
+Application yellowdocs-writer :
+	src/main.cpp
+	src/YellowDocsWriterApp.cpp
+	src/MainWindow.cpp
+	src/DocumentWindow.cpp
+	src/EditorView.cpp
+	src/ToolbarView.cpp
+	src/StatusView.cpp
+	src/FilePanel.cpp
+	src/PrintView.cpp
+	src/PreferencesWindow.cpp
+	src/AboutWindow.cpp
+	src/FindPanel.cpp
+	src/ReplacePanel.cpp
+	resources/YellowDocsWriter.rdef
+	: be trackersupport libyellowdocs-core.a libyellowdocs-ui.a libyellowdocs-utils.a
+	: -DYELLOWDOCS_WRITER_APP
+;

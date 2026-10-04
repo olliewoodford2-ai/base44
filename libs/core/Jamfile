@@ -1,0 +1,16 @@
+SubDir libs core ;
+
+SharedLibrary libyellowdocs-core.a :
+	src/DocumentTypes.cpp
+	src/TextStyle.cpp
+	src/ParagraphStyle.cpp
+	src/ImageData.cpp
+	src/DocumentModel.cpp
+	src/Selection.cpp
+	src/UndoManager.cpp
+	src/DocumentIO.cpp
+	src/MIMETypeRegistration.cpp
+	src/TrackerIntegration.cpp
+	: be trackersupport
+	: -DYELLOWDOCS_CORE_LIBRARY
+;
