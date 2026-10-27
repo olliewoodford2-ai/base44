@@ -316,16 +316,72 @@ async function downloadProjectByPaths(_appId, paths) {
     throw new Error(`Nie pojawił się segment "${segment}" w drzewku plików.`);
   }
 
-  function findNavigationRoot() {
-    return document.querySelector('[role="navigation"]') || document.querySelector("nav");
+  
+function findNavigationRoot() {
+  const elements = Array.from(document.querySelectorAll("body *"));
+
+  const heading = elements.find((element) =>
+    element.children.length === 0 &&
+    normalizeButtonText(element.textContent).toLowerCase() === "code files"
+  );
+
+  if (heading) {
+    let ancestor = heading;
+
+    for (let i = 0; i < 12 && ancestor; i++, ancestor = ancestor.parentElement) {
+      const labels = Array.from(ancestor.querySelectorAll("button"))
+        .map((button) => normalizeButtonText(button.textContent).toLowerCase());
+
+      if (labels.includes("src") && labels.includes("base44")) {
+        return ancestor;
+      }
+    }
   }
 
-  function findTreeContainer(navigation) {
-    return Array.from(navigation.querySelectorAll("div")).find((container) => {
-      const nodes = Array.from(container.children);
-      return nodes.length > 0 && nodes.every((node) => getNodeButton(node));
-    }) || null;
+  return document.querySelector('[role="navigation"]')
+    || document.querySelector("nav")
+    || document.body;
+}
+
+function findTreeContainer(navigation) {
+  if (!navigation) return null;
+
+  const candidates = [
+    ...(navigation.matches?.("div") ? [navigation] : []),
+    ...Array.from(navigation.querySelectorAll("div"))
+  ];
+
+  let bestContainer = null;
+  let bestScore = 0;
+
+  for (const container of candidates) {
+    const nodes = Array.from(container.children);
+    if (nodes.length < 2) continue;
+
+    const buttons = nodes
+      .map((node) => getNodeButton(node))
+      .filter(Boolean);
+
+    if (buttons.length < 2) continue;
+
+    const labels = buttons.map((button) =>
+      normalizeButtonText(button.textContent).toLowerCase()
+    );
+
+    let score = buttons.length;
+
+    if (labels.includes("src")) score += 100;
+    if (labels.includes("base44")) score += 100;
+
+    if (score > bestScore) {
+      bestScore = score;
+      bestContainer = container;
+    }
   }
+
+  return bestContainer;
+}
+
 
   function findTreeButton(container, label) {
     const wanted = normalizeButtonText(label);
