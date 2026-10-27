@@ -108,7 +108,7 @@ downloadBtn.addEventListener("click", async () => {
       log(`${result.error}\n\nBase44 blokuje bezpośredni odczyt. Przechodzę automatycznie na tryb awaryjny: ${paths.length} plików przez edytor...`);
       const fallback = await runInPage(downloadProjectByPaths, [appId, paths]);
       if (!fallback.ok) {
-        log(`${fallback.error}\n\nNiepobrane:\n${(fallback.failures || []).map((x) => `- ${x.path}`).join("\n")}`);
+        log(`${fallback.error}\n\nNiepobrane:\n${(fallback.failures || []).map((x) => `- ${x.path}: ${x.error || "Nieznany błąd"}`).join("\n")}`);
         return;
       }
       await saveZip(fallback.files, `base44-${appId}-editor.zip`);
@@ -142,7 +142,7 @@ downloadByPathsBtn.addEventListener("click", async () => {
     log(`Pobieram ${paths.length} plików przez edytor...`);
     const result = await runInPage(downloadProjectByPaths, [appId, paths]);
     if (!result.ok) {
-      log(`${result.error}\n\nNiepobrane:\n${(result.failures || []).map((x) => `- ${x.path}`).join("\n")}`);
+      log(`${result.error}\n\nNiepobrane:\n${(result.failures || []).map((x) => `- ${x.path}: ${x.error || "Nieznany błąd"}`).join("\n")}`);
       return;
     }
     await saveZip(result.files, `base44-${appId}-editor.zip`);
